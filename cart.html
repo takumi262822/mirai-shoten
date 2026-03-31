@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bag | 未来商店</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #fdfaf6; 
+            --accent: #6b705c; 
+            --text: #432818; 
+            --card: #ffffff;
+        }
+        
+        body { 
+            font-family: 'Quicksand', sans-serif; background: var(--bg); color: var(--text); 
+            margin: 0; padding: 0; min-height: 100vh;
+        }
+
+        header { padding: 60px 20px; text-align: center; }
+        .logo { 
+            font-family: 'DM Serif Display', serif; font-size: 2.2em; 
+            text-decoration: none; color: var(--accent); letter-spacing: 1px;
+        }
+
+        .container {
+            width: 90%; max-width: 800px; margin: 0 auto; padding-bottom: 100px;
+        }
+        
+        h2 { 
+            font-family: 'DM Serif Display', serif; font-size: 2.5em; 
+            text-align: center; margin-bottom: 40px; font-weight: 400;
+        }
+
+        .cart-card {
+            background: var(--card); border-radius: 30px; padding: 30px;
+            margin-bottom: 20px; display: flex; align-items: center;
+            box-shadow: 0 10px 30px rgba(107, 112, 92, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .cart-card:hover { transform: translateY(-5px); }
+
+        .product-icon { font-size: 3.5em; margin-right: 30px; }
+        .product-main { flex: 1; }
+        .product-name { font-weight: 700; font-size: 1.1em; margin-bottom: 5px; }
+        .product-price { font-size: 0.9em; opacity: 0.6; }
+
+        .qty-controls { display: flex; align-items: center; gap: 15px; }
+        .qty-input { 
+            border: 2px solid #f0ece3; background: #fdfaf6; padding: 8px; width: 50px; 
+            border-radius: 12px; text-align: center; font-family: inherit; font-weight: 700;
+        }
+
+        .btn-delete { 
+            background: none; border: none; color: #b7b7a4; cursor: pointer; 
+            font-size: 0.8em; font-weight: 700; margin-left: 20px; transition: 0.3s;
+        }
+        .btn-delete:hover { color: #dd6b20; }
+
+        .summary-box { 
+            background: #f0ece3; border-radius: 30px; padding: 40px;
+            margin-top: 40px; text-align: center;
+        }
+        .total-label { font-size: 0.8em; font-weight: 700; letter-spacing: 2px; opacity: 0.6; }
+        .total-price { 
+            font-family: 'DM Serif Display', serif; font-size: 3em; 
+            margin: 10px 0 30px; color: var(--accent);
+        }
+
+        .btn-checkout { 
+            display: block; width: 100%; max-width: 300px; margin: 0 auto;
+            background: var(--accent); color: #fff; border: none; padding: 20px;
+            border-radius: 40px; font-size: 1em; font-weight: 700; 
+            text-decoration: none; transition: 0.3s;
+            text-align: center;
+        }
+        .btn-checkout:hover { background: #a5a58d; transform: scale(1.05); }
+
+        .btn-continue { 
+            display: inline-block; margin-top: 25px; text-decoration: none; 
+            color: var(--accent); font-size: 0.9em; font-weight: 700; border-bottom: 1px solid;
+        }
+
+        .empty-state { text-align: center; padding: 80px 0; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">未来商店</a>
+</header>
+
+<div class="container" id="cartContent">
+    <!-- JSで描画 -->
+</div>
+
+<script type="module" src="./src/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete | 未来商店</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.3);
+            --text: #fff;
+        }
+
+        body { 
+            font-family: 'Montserrat', "Hiragino Sans", sans-serif;
+            margin: 0; padding: 0;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            background-attachment: fixed;
+            color: var(--text); line-height: 1.8; overflow: hidden;
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header {
+            position: fixed; top: 30px; width: 90%; max-width: 1100px; height: 70px;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; background: var(--glass); backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border); border-radius: 100px;
+        }
+
+        .logo { 
+            font-family: 'Montserrat', sans-serif; font-size: 1.1em; font-weight: 200;
+            letter-spacing: 8px; color: #fff; text-decoration: none; text-transform: uppercase;
+        }
+
+        .thank-you-box {
+            background: var(--glass); backdrop-filter: blur(45px);
+            -webkit-backdrop-filter: blur(45px);
+            border: 1px solid var(--border); border-radius: 60px;
+            padding: 80px 40px; width: 90%; max-width: 600px; text-align: center;
+            box-shadow: 0 40px 120px rgba(0,0,0,0.1);
+            animation: slideUp 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-sizing: border-box;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon { 
+            font-size: 3em; margin-bottom: 30px; display: block; 
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        h2 { 
+            font-family: 'Noto Serif JP', serif; font-size: 1.8em; 
+            margin-bottom: 25px; letter-spacing: 4px; font-weight: 400;
+        }
+
+        p { 
+            font-size: 0.9em; opacity: 0.8; letter-spacing: 1.5px; 
+            margin-bottom: 50px; line-height: 2;
+        }
+
+        .btn-home {
+            display: inline-block; padding: 20px 60px; border-radius: 100px;
+            background: #fff; color: #333; font-weight: 700; text-decoration: none;
+            letter-spacing: 4px; font-size: 0.85em; transition: 0.5s;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            letter-spacing: 7px;
+        }
+
+        footer { position: fixed; bottom: 30px; color: rgba(255,255,255,0.3); font-size: 0.6em; letter-spacing: 4px; }
+
+        @media (max-width: 600px) {
+            .thank-you-box { padding: 60px 30px; border-radius: 40px; }
+            h2 { font-size: 1.4em; }
+            p { font-size: 0.8em; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Mirai</a>
+    </header>
+
+    <div class="thank-you-box">
+        <span class="icon">✨</span>
+        <h2 id="displayTitle">お手続きが完了いたしました</h2>
+        
+        <p id="displayMessage">
+            ご購入ありがとうございます。<br>
+            内容を確認次第、発送の手配を進めさせていただきます。<br>
+            今しばらくお待ちください。
+        </p>
+
+        <a href="index.html" class="btn-home">BACK TO TOP</a>
+    </div>
+
+    <footer>&copy; MIRAI SHOTEN All Rights Reserved.</footer>
+
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>

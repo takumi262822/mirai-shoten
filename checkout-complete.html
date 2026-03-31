@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ご購入ありがとうございます | 未来商店</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <style>
+        :root { 
+            --glass-soft: rgba(255, 255, 255, 0.03); /* さらに透明に */
+            --text: #fff;
+        }
+
+        /* --- 幻想的なオーロラ背景（完全維持） --- */
+        body { 
+            font-family: 'Montserrat', "Hiragino Sans", sans-serif;
+            margin: 0; padding: 0;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            background-attachment: fixed;
+            color: var(--text); line-height: 2; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 開放感のあるミニマル・レイアウト --- */
+        .thank-you-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            /* 枠線を廃止し、影と極薄の背景のみで表現 */
+            background: var(--glass-soft);
+            backdrop-filter: blur(10px);
+            border-radius: 100px;
+            animation: fadeIn 2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon { 
+            font-size: 5em; margin-bottom: 20px; display: block; 
+            opacity: 0.9;
+            animation: float 8s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        h1 { 
+            font-family: 'Noto Serif JP', serif; 
+            font-size: 2.2em; margin-bottom: 20px; 
+            letter-spacing: 12px; font-weight: 900;
+            opacity: 0.9;
+        }
+        
+        p { 
+            font-size: 0.85em; opacity: 0.6;
+            margin-bottom: 60px; font-weight: 200;
+            letter-spacing: 2px;
+        }
+
+        /* --- 浮遊するボタン（XSS対策・ミニマルデザイン） --- */
+        .btn-home {
+            display: inline-block;
+            padding: 18px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.7em;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-decoration: none;
+        }
+
+        .btn-home:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.05);
+            letter-spacing: 6px;
+        }
+
+        .footer-note {
+            margin-top: 60px;
+            font-size: 0.6em;
+            opacity: 0.3;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="thank-you-container">
+        <span class="icon">✨</span>
+        <h1>THANK YOU</h1>
+        <p>
+            ご注文を承りました。<br>
+            未来商店のアイテムが、あなたの日常に<br>
+            心地よい光を運びますように。
+        </p>
+        
+        <!-- XSS対策：data-hrefを使用 -->
+        <button class="btn-home js-nav" data-href="index.html">Back to Gallery</button>
+
+        <div class="footer-note">
+            A GENTLE BREEZE FOR YOUR LIFE.
+        </div>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>

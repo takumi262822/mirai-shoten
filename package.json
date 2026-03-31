@@ -1,0 +1,13 @@
+{
+  "name": "mirai-shoten",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.js tests/**/*.js",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1"
+  }
+}
