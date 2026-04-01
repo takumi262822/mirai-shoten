@@ -51,6 +51,12 @@ npm test
 
 CI: `.github/workflows/ci.yml`
 
+### テスト方針
+
+- `tests/validator.test.js` で入力検証、`tests/cart-service.test.js` で金額計算、`tests/navigation.test.js` で許可ルート、`tests/xss.test.js` で安全な表示処理を確認しています。
+- テスト名は日本語で統一し、README の検証観点と対応が取れるようにしています。
+- 購入導線の最終体験は手動確認しつつ、フォーム・遷移・計算・サニタイズのような回帰しやすいロジックを自動テストで固めています。
+
 ## 6. 5分評価ガイド
 
 1. `index.html` で一覧・導線を確認

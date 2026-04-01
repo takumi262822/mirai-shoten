@@ -29,8 +29,12 @@ import { XSSProtection } from "../utils/xss.js";
  * - 出力処理: localStorage と DOM を更新し、EC サイト各画面の表示を成立させる
  */
 class Main {
+  /**
+   * 内部状態として現在のページ名と各 UI 管理クラスを保持する。
+   * どの初期化処理を走らせるかは constructor で決めたページ名を基準に分岐する。
+   */
   constructor() {
-    this.currentPage = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
+    this.currentPageName = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
     this.styleManager = new StyleManager();
     this.header = new Header();
     this.footer = new Footer();
@@ -40,27 +44,27 @@ class Main {
     this.footer.setYear();
     this.initNavigation();
 
-    if (this.currentPage === "index.html") {
+    if (this.currentPageName === "index.html") {
       this.initHomePage();
     }
 
-    if (CodeDefinitions.productsByPage[this.currentPage]) {
+    if (CodeDefinitions.productsByPage[this.currentPageName]) {
       this.initProductPage();
     }
 
-    if (this.currentPage === "contact.html") {
+    if (this.currentPageName === "contact.html") {
       this.initContactPage();
     }
 
-    if (this.currentPage === "contact-confirm.html") {
+    if (this.currentPageName === "contact-confirm.html") {
       this.initContactConfirmPage();
     }
 
-    if (this.currentPage === "cart.html") {
+    if (this.currentPageName === "cart.html") {
       this.initCartPage();
     }
 
-    if (this.currentPage === "checkout.html") {
+    if (this.currentPageName === "checkout.html") {
       this.initCheckoutPage();
     }
   }
@@ -101,7 +105,7 @@ class Main {
   }
 
   initProductPage() {
-    const product = CodeDefinitions.productsByPage[this.currentPage];
+    const product = CodeDefinitions.productsByPage[this.currentPageName];
     const quantityInput = document.getElementById("quantity");
     const addButton = document.querySelector(".btn-cart");
 
@@ -230,6 +234,7 @@ class Main {
       return;
     }
 
+    // カート画面内だけで使う再描画処理を閉じ込め、外部状態を増やさないようにする。
     const renderCart = () => {
       const cart = JSON.parse(localStorage.getItem(AppConstants.storageKeys.cart) || "[]");
 
@@ -311,6 +316,7 @@ class Main {
       });
     });
 
+    // 注文確認画面専用の集計処理として定義し、画面表示に必要な値をここで確定させる。
     const loadSummary = () => {
       const cart = JSON.parse(localStorage.getItem(AppConstants.storageKeys.cart) || "[]");
       const summaryList = document.getElementById("summaryList");
