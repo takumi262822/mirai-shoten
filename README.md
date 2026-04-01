@@ -2,6 +2,9 @@
 
 企業提出向けに構成した、静的 Web フロントエンドのポートフォリオです。
 
+`mirai-shoten-admin` は、このプロジェクトに対応する管理者向けダッシュボードです。
+本プロジェクトは利用者向けフロント画面、`mirai-shoten-admin` は運用管理画面として役割を分けています。
+
 ## 1. 採用担当向けサマリー
 
 - 目的: UI実装力と設計改善力を短時間で確認できる提出物
@@ -101,3 +104,8 @@ CI: `.github/workflows/ci.yml`
 - [ ] `.github/workflows/ci.yml` で CI が有効
 - [ ] README に構成・起動方法・検証観点が記載されている
 - [ ] `docs/screenshots` に提出用キャプチャを格納済み
+
+## 12. 関連プロジェクト
+
+- 対応する管理画面: `../mirai-shoten-admin`
+- 独立した別作品: `../godufo-game`, `../quiz-game`, `../脱出ゲーム`

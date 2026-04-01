@@ -12,6 +12,12 @@
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 処理概要:
+ * - 初期化処理: モバイルメニュー用ボタンとナビゲーション要素を取得する
+ * - 更新処理: メニュー開閉、スクロール時のクラス切替をイベントで制御する
+ * - 出力処理: 各ページ共通のヘッダー操作性を維持する
+ */
 export class Header {
   initMobileMenu(menuButtonId = "menu-btn", navId = "main-nav") {
     const button = document.getElementById(menuButtonId);

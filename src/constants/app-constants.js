@@ -2,6 +2,12 @@
  * @author Takumi Harada
  * @date 2026-03-31
  */
+/**
+ * 定数概要:
+ * - storageKeys はカートや管理画面連携で利用する localStorage キー
+ * - allowedPaths は画面遷移で許可するページのホワイトリスト
+ * - defaults は未入力時の代替文言をまとめた表示定数
+ */
 export const AppConstants = {
   storageKeys: {
     cart: "futureShopCart",

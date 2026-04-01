@@ -12,6 +12,12 @@
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 処理概要:
+ * - 初期化処理: 発光カーソル、ティルト、マグネット、リビール演出対象を取得する
+ * - 画面制御: マウス移動やスクロール量に応じて CSS 変数と class を更新する
+ * - 出力処理: トップページの視覚演出を DOM スタイルへ反映する
+ */
 export class StyleManager {
   initCursorGlow(selector = "#cursor-glow") {
     const glow = document.querySelector(selector);

@@ -12,6 +12,12 @@
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 処理概要:
+ * - 入力値: 数量入力値またはカート配列
+ * - 計算処理: 数量の正規化と商品金額合計の算出を担当する
+ * - 出力処理: カート保存前に使える安全な数量値と総額を返す
+ */
 export class CartService {
   static normalizeQuantity(value) {
     return Math.max(1, Number.parseInt(value, 10) || 1);

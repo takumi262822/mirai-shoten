@@ -22,6 +22,12 @@ import { XSSProtection } from "../utils/xss.js";
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 処理概要:
+ * - 初期化処理: 現在ページ判定、ヘッダー・フッター・演出管理クラスを準備する
+ * - 進行処理: 商品ページ、問い合わせ、カート、購入画面ごとに必要な処理を分岐する
+ * - 出力処理: localStorage と DOM を更新し、EC サイト各画面の表示を成立させる
+ */
 class Main {
   constructor() {
     this.currentPage = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
@@ -389,6 +395,7 @@ class Main {
         allOrders.unshift({
           id: `#${Math.floor(1000 + Math.random() * 9000)}`,
           customer: XSSProtection.escape(name.value),
+          email: XSSProtection.escape(email.value),
           address: `〒${XSSProtection.escape(zip.value)} ${XSSProtection.escape(address.value)}`,
           items: cart.map((item) => `${XSSProtection.escape(item.name)}(${XSSProtection.escape(item.quantity)})`).join(", "),
           price: summaryTotal ? summaryTotal.textContent : "\u00a50",

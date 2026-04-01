@@ -12,6 +12,12 @@
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 処理概要:
+ * - 入力値: 年表示先のセレクタ
+ * - 更新処理: 現在年を算出して対象要素へ書き込む
+ * - 出力処理: フッター表記を毎年手修正しなくても済む状態にする
+ */
 export class Footer {
   setYear(selector = "[data-current-year]") {
     const target = document.querySelector(selector);
