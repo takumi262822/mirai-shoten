@@ -59,31 +59,36 @@
 | image | string | 商品アイコン |
 | quantity | number | 購入数 |
 
-### 3.3 注文データ
-| 項目 | 型 | 内容 |
+### 3.3 注文データ (adminOrders 1件分)
+| 項目 | 型 | 形式・内容 |
 |---|---|---|
-| id | string | 注文番号 |
-| customer | string | 購入者名 |
-| email | string | メールアドレス |
-| address | string | 郵便番号付き住所 |
-| items | string | 商品一覧文字列 |
-| price | string | 合計金額表示 |
-| status | string | 初期値は 準備中 |
-| date | string | 注文日時 |
+| id | string | `#${Math.floor(1000 + Math.random() * 9000)}` 例: `#4521` |
+| customer | string | `XSSProtection.escape(name.value)` |
+| email | string | `XSSProtection.escape(email.value)` |
+| address | string | `〒${zip} ${address}` 例: `〒123-4567 東京都渋谷区1-1` |
+| items | string | `商品名(数量)` を `", "` で結合 例: `ほっこり陶器マグ(2), アロマキャンドル(1)` |
+| price | string | `summaryTotal.textContent` の値 例: `¥5000` |
+| status | string | 固定値 `準備中` |
+| date | string | `new Date().toLocaleString()` の結果 |
 
 ### 3.4 定数定義
 
 #### 3.4.1 AppConstants
-- storageKeys.cart: futureShopCart
-- storageKeys.adminOrders: adminOrders
-- allowedPaths: 画面遷移を許可する HTML 一覧
-- defaults.emptyText: 未入力
-- defaults.emptySelect: 未選択
+- storageKeys.cart: `futureShopCart`
+- storageKeys.adminOrders: `adminOrders`
+- allowedPaths (全11件):
+  - `index.html` / `cart.html` / `hokkori-mug.html` / `aroma-candle.html` / `organic-linen.html`
+  - `contact.html` / `contact-confirm.html` / `contact-complete.html`
+  - `checkout.html` / `checkout-complete.html` / `マイページ.html`
+- defaults.emptyText: `未入力`
+- defaults.emptySelect: `未選択`
 
 #### 3.4.2 CodeDefinitions.productsByPage
-- hokkori-mug.html -> ほっこり陶器マグ
-- aroma-candle.html -> アロマキャンドル
-- organic-linen.html -> オーガニックリネン
+| ページ | id | name | price | image |
+|---|---|---|---|---|
+| `hokkori-mug.html` | `mag_01` | ほっこり陶器マグ | 1800 | ☕ |
+| `aroma-candle.html` | `candle_01` | アロマキャンドル | 2400 | 🕯️ |
+| `organic-linen.html` | `linen_01` | オーガニックリネン | 1200 | 🌿 |
 
 ## 4. 詳細設計
 
@@ -292,8 +297,8 @@
 - 分岐:
   - a. カートが空の場合: loadSummary は 商品は未選択です と ¥0 を表示する。
   - b. カートがある場合: 商品別小計と合計を表示する。
-  - c. 名前未入力の場合: nameError に ご入力が必要です を表示する。
-  - d. 名前が許可文字以外を含む場合: nameError に形式エラー文言を表示する。
+  - c. 名前未入力の場合: `showTextError("nameError", "ご入力が必要です")`
+  - d. 名前が許可文字以外を含む場合: `showTextError("nameError", "お名前は漢字・ひらがな・英字のみで入力してください")`
   - e. email, zip, address, payment のいずれかが不正な場合: 各 error を表示する。
   - f. いずれかに不正がある場合: 注文保存せず処理終了する。
   - g. 正常な場合: 注文履歴保存後に完了画面へ遷移する。
@@ -377,6 +382,8 @@
 - 設定値:
   - パーティクル数: 25
   - 表示時間: 1800ms
+  - サブタイトルテキスト: `THANK YOU`
+  - 本文テキスト: `Added to Collection`
 - 処理:
   1. 通知ボックスとサブタイトルを生成する。
   2. スタイルを直接設定して body に追加する。
@@ -395,6 +402,25 @@
   1. 配列を map で走査する。
   2. 商品アイコン、商品名、価格、数量入力、削除ボタンを含む HTML を生成する。
   3. 文字列結合して返す。
+- HTML テンプレート (1行分):
+  ```html
+  <div class="cart-card">
+    <div class="product-icon">{escape(item.image)}</div>
+    <div class="product-main">
+      <div class="product-name">{escape(item.name)}</div>
+      <div class="product-price">¥{item.price}</div>
+    </div>
+    <div class="qty-controls">
+      <input type="number" class="qty-input" value="{escape(item.quantity)}"
+             min="1" data-action="updateQty" data-index="{index}">
+      <button class="btn-delete" data-action="deleteItem" data-index="{index}">削除</button>
+    </div>
+  </div>
+  ```
+- カート空状態テンプレート (`.empty-state`):
+  - 絵文字: ☁️、テキスト: `カートはまだ空っぽです`、リンク: `お買い物をはじめる`
+- カートサマリーテンプレート (`.summary-box`):
+  - ラベル: `Estimated Total`、購入ボタン: `ご購入手続きへ`、継続リンク: `お買い物を続ける`
 
 ### 4.5 Header クラス
 
@@ -727,72 +753,14 @@
 - 品質ゲート: npm run lint、npm test、GitHub Actions CI
 - セキュリティ: 全 DOM 書き込みは XSSProtection.escape() を経由する
 - 制約: サーバーサイドなし。localStorage のみでデータを保持する
-- 分岐:
-  - a. null または undefined の場合: 空文字を返す。
-  - b. それ以外の場合: HTML エンティティへ変換する。
 
-#### 4.9.2 normalizeFullWidthAscii
-- 1. メール入力正規化処理
-- I/F:
-  - 入力: value
-  - 出力: 半角正規化済み文字列
-- 設定値:
-  - 変換対象: Ａ-Ｚ, ａ-ｚ, ０-９, ＠, ．, ー, 全角空白
-- 処理:
-  1. 入力が空なら空文字を返す。
-  2. 全角英数字と一部記号を半角へ変換する。
-  3. 長音記号をハイフンへ変換する。
-  4. 半角空白と全角空白を除去する。
-- 分岐:
-  - a. value が空の場合: 空文字を返す。
-  - b. それ以外の場合: 正規化結果を返す。
-
-## 5. ページ別処理一覧
-
-### 5.1 トップ画面
-- Main.init -> initHomePage
-- Header.initMobileMenu
-- Header.initScrollClass
-- StyleManager.initCursorGlow
-- StyleManager.initTilt
-- StyleManager.initMagnet
-- StyleManager.initReveal
-
-### 5.2 商品詳細画面
-- Main.init -> initProductPage
-- CartService.normalizeQuantity
-- localStorage.futureShopCart 更新
-- UIComponents.showAddToCartNotice
-
-### 5.3 問い合わせ画面
-- Main.init -> initContactPage
-- XSSProtection.normalizeFullWidthAscii
-- Validator 各種判定
-- Main.showError
-
-### 5.4 問い合わせ確認画面
-- Main.init -> initContactConfirmPage
-- Main.writeText
-
-### 5.5 カート画面
-- Main.init -> initCartPage
-- UIComponents.renderCartRows
-- CartService.calculateTotal
-
-### 5.6 購入画面
-- Main.init -> initCheckoutPage
-- loadSummary
-- Validator 各種判定
-- XSSProtection.escape
-- localStorage.adminOrders 更新
-
-## 6. 例外・制約
+## 7. 例外・制約
 - localStorage が無効な環境ではカートと注文履歴が保持できない。
 - サーバーとの通信は行わないため、注文データはブラウザ単位でのみ保持される。
 - 注文番号は Math.random による簡易生成であり、重複防止保証は行っていない。
 - マイページ.html は遷移制御のみ存在し、実体画面の認証連携は未実装である。
 
-## 7. 保守方針
+## 8. 保守方針
 - 画面説明を変更する場合は SCREEN-OVERVIEW.md を更新する。
 - 処理仕様を変更する場合は本 DESIGN.md を更新する。
 - 商品追加時は CodeDefinitions と商品 HTML の両方を合わせて更新する。
