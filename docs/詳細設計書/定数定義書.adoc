@@ -23,12 +23,12 @@
 
 == 定数一覧
 
-[#定数一覧, title="定数一覧", cols="1,5,3,4,5", options="header", align="center"]
+[#定数一覧, title="定数一覧", cols="1,4,4,3,4,5", options="header", align="center"]
 |===
-^.^|No. ^.^|定数名 ^.^|型 ^.^|設定値 ^.^|備考
+^.^|No. ^.^|定数名（論理名） ^.^|定数名（物理名） ^.^|型 ^.^|設定値 ^.^|備考
 
-^.^|{counter:定数} <.^|AppConstants.storageKeys.cart <.^|string <.^|"futureShopCart" <.^|カートデータを保存する localStorage キー
-^.^|{counter:定数} <.^|AppConstants.storageKeys.adminOrders <.^|string <.^|"adminOrders" <.^|注文確定データを管理画面と共有する localStorage キー
-^.^|{counter:定数} <.^|AppConstants.defaults.emptyText <.^|string <.^|"未入力" <.^|フォーム値が空だった場合の代替表示文言
-^.^|{counter:定数} <.^|AppConstants.defaults.emptySelect <.^|string <.^|"未選択" <.^|セレクト項目が未選択だった場合の代替表示文言
+^.^|{counter:定数} <.^|カートストレージキー <.^|AppConstants.storageKeys.cart <.^|string <.^|"futureShopCart" <.^|カートデータを保存する localStorage キー
+^.^|{counter:定数} <.^|注文ストレージキー <.^|AppConstants.storageKeys.adminOrders <.^|string <.^|"adminOrders" <.^|注文確定データを管理画面と共有する localStorage キー
+^.^|{counter:定数} <.^|空入力代替テキスト <.^|AppConstants.defaults.emptyText <.^|string <.^|"未入力" <.^|フォーム値が空だった場合の代替表示文言
+^.^|{counter:定数} <.^|未選択代替テキスト <.^|AppConstants.defaults.emptySelect <.^|string <.^|"未選択" <.^|セレクト項目が未選択だった場合の代替表示文言
 |===
