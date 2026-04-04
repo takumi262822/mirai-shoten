@@ -70,7 +70,13 @@
 
 |init()
 |public
-|Footer.setYear() 後、ページ名に応じて各 initXxxPage() を分岐呼び出しする
+|Footer.setYear() を呼び、initNavigation() を実行。その後以下の条件で各初期化を呼び分ける +
+• currentPageName === "index.html" → initHomePage() +
+• CodeDefinitions.productsByPage[currentPageName] が存在 → initProductPage() +
+• currentPageName === "contact.html" → initContactPage() +
+• currentPageName === "contact-confirm.html" → initContactConfirmPage() +
+• currentPageName === "cart.html" → initCartPage() +
+• currentPageName === "checkout.html" → initCheckoutPage()
 
 |initNavigation()
 |public
@@ -86,19 +92,50 @@
 
 |initCartPage()
 |public
-|localStorage からカートを読み込み、UIComponents.renderCart() で描画する
+|localStorage からカートを読み込み描画する。 +
+• 空の場合は empty-state を表示 +
+• data-action="updateQty" の input change 山 normalizeQuantity() で数量を書き戻して再描画 +
+• data-action="deleteItem" の click → cart.splice(index, 1) 後再描画 +
+イベントリスナー 2 つは container に委譲（個別行ではなくイベントバブリング活用）
 
 |initCheckoutPage()
 |public
-|カート内容を購入フォームに表示し、送信時にバリデーションを実行して localStorage に注文を保存する
+|購入フォームを初期化し、注文ボタンクリック時に以下を実行する +
+• name: isRequired + isSafeText +
+• email: isEmail +
+• zip: isZip +
+• address: isRequired +
+• payment ラジオ: 未選択の場合は paymentError 表示 +
+全て通過後、cart と allOrders を localStorage から読み込んで注文オブジェクトを allOrders.unshift() 。完了後は localStorage(cart) を削除し checkout-complete.html へ遷移する +
+画面読み込み時に loadSummary() を呼び、カートの商品名・数量・小計・合計を表示する
 
 |initContactPage()
 |public
-|問い合わせフォームの入力値を sessionStorage に保存し確認画面へ遷移する
+|問い合わせフォームの submit 時に各フィールドを検証する。検証内容は以下の通り +
+• name: isRequired + isSafeText、数字ありの場合は nameNumberError を表示 +
+• kana: isKana +
+• tel: isTel +
+• email: isEmail（blur 時に全角 ASCII を半角正規化） +
+• pref: isRequired + isSafeText +
+• usage ラジオ: 未選択の場合は usageError 表示 +
+• category ラジオ: 未選択の場合は categoryError 表示 +
+エラーがあれば event.preventDefault() 後にページ先頭へスクロール
 
 |initContactConfirmPage()
 |public
-|sessionStorage から入力値を復元して確認画面に表示する
+|URLSearchParams から入力値を復元して確認画面に表示する
+
+|writeText(elementId, value)
+|private
+|document.getElementById(elementId) の textContent に value をセットするヒルパー。要素がなければ何もしない
+
+|showError(errorId, inputElement)
+|private
+|errorId のエラーメッセージ要素を display:block にする。inputElement が指定された場合は is-error クラスも付ける
+
+|showTextError(errorId, message)
+|private
+|errorId の要素に message を textContent にセットして display:block にする。複数パターンのエラー文が存在するフィールド向け
 
 |===
 
