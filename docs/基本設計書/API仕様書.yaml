@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: 未来商店商材（MIRAI SHOTEN）データ仕様
+  description: |-
+    MIRAI SHOTEN はブラウザ上で動作するECサイトです。
+    外部 REST API は持たず、カートデータと注文データを localStorage で管理します。
+    注文確定時に管理画面連携用キー（adminOrders）にも書き込みます。
+  version: 1.0.0
+  contact:
+    name: Takumi Harada
+
+servers: []
+
+paths: {}
+
+components:
+  schemas:
+
+    CartItem:
+      type: object
+      description: カートに追加された商品1件分のデータ
+      required: [id, name, price, quantity]
+      properties:
+        id:
+          type: string
+          description: 商品ID
+          example: "hokkori-mug"
+        name:
+          type: string
+          description: 商品名
+          example: "ほっこり陶器マグ"
+        price:
+          type: integer
+          description: 単価（円）
+          minimum: 0
+          example: 2800
+        quantity:
+          type: integer
+          description: 数量
+          minimum: 1
+          example: 2
+
+    OrderRecord:
+      type: object
+      description: 注文1件分のデータ（adminOrdersに配列で格納）
+      required: [id, customerName, items, total, status, createdAt]
+      properties:
+        id:
+          type: string
+          description: 注文ID（タイムスタンプベース）
+          example: "order-1711234567890"
+        customerName:
+          type: string
+          description: 注文者氏名
+        customerKana:
+          type: string
+          description: 注文者氏名（フリガナ）
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+        tel:
+          type: string
+          description: 電話番号（ハイフン除去済み10〜11桁）
+        zip:
+          type: string
+          description: 郵便番号
+          example: "123-4567"
+        address:
+          type: string
+          description: 住所
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total:
+          type: integer
+          description: 合計金額（円）
+          minimum: 0
+        status:
+          type: string
+          description: 注文ステータス
+          enum: [pending, processing, shipped, completed, cancelled]
+          default: pending
+        createdAt:
+          type: string
+          format: date-time
+          description: 注文日時（ISO 8601形式）
+
+x-storage-keys:
+  futureShopCart:
+    description: "カート内容を保持する localStorage キー"
+    type: "JSON文字列（CartItem[]）"
+    set-by: "src/core/cart-service.js"
+    read-by: "src/main.js, src/core/cart-service.js"
+  adminOrders:
+    description: "注文履歴を保持する localStorage キー（管理画面と共有）"
+    type: "JSON文字列（OrderRecord[]）"
+    set-by: "src/main.js（購入完了時）"
+    read-by: "mirai-shoten-admin の管理画面"
