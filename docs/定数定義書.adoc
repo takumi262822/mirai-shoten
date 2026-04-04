@@ -1,0 +1,84 @@
+= 定数定義書
+:project: 未来商店商材
+:author: Takumi Harada
+:revdate: 2026-04-05
+:doctype: article
+:toc:
+:toc-title: 目次
+:sectnums:
+
+== 概要
+
+本書はプロジェクト「{project}」で利用する定数値を列挙したものです。
+ソースファイル `src/constants/app-constants.js` から逆引きで抽出しています。
+
+---
+
+== ストレージキー（storageKeys）
+
+[cols="2,1,2,4", options="header"]
+|===
+|定数名
+|型
+|値
+|内容
+
+|storageKeys.cart
+|string
+|"futureShopCart"
+|カートデータを保存する localStorage キー
+
+|storageKeys.adminOrders
+|string
+|"adminOrders"
+|注文確定データを管理画面と共有するための localStorage キー
+
+|===
+
+---
+
+== デフォルト表示文言（defaults）
+
+[cols="2,1,2,4", options="header"]
+|===
+|定数名
+|型
+|値
+|内容
+
+|defaults.emptyText
+|string
+|"未入力"
+|フォーム値が空だった場合の代替表示文言
+
+|defaults.emptySelect
+|string
+|"未選択"
+|セレクト項目が未選択だった場合の代替表示文言
+
+|===
+
+---
+
+== CartService 計算定義
+
+ファイル: `src/core/cart-service.js`
+
+[cols="2,1,2,4", options="header"]
+|===
+|メソッド
+|戻り型
+|処理内容
+|備考
+
+|normalizeQuantity(value)
+|number
+|parseInt(value) で変換し、1 未満なら 1 にクランプする
+|フォーム入力の文字列数量を安全な整数に変換する
+
+|calculateTotal(cart)
+|number
+|cart の各アイテムの price × quantity を合計する
+|購入確認画面の合計金額表示に使用
+
+|===

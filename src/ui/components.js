@@ -1,24 +1,8 @@
-/**
- * @author Takumi Harada
- * @date 2026-03-31
- */
 import { XSSProtection } from "../utils/xss.js";
 
 /**
- * UIComponents クラス
- * 目的: UI部品の生成・更新を担当する
- * 入力: 表示データ・DOM要素・操作イベント
- * 処理: 画面要素を生成/更新し必要なイベントを接続する
- * 出力: 更新されたUI表示
- * 補足: ビジネスロジックは別クラスに分離する
+ * カート追加通知・注文表示など EC 画面共通の DOM 部品を生成・更新するクラス。
  * @author Takumi Harada
- * @date 2026-04-01
- */
-/**
- * 処理概要:
- * - 生成処理: カート追加通知や注文表示に使う共通 DOM を組み立てる
- * - 保護処理: 表示前に必要な文言を XSSProtection 経由で安全な形へ整える
- * - 出力処理: Main から再利用できる UI 部品や通知表示を返す
  */
 export class UIComponents {
   static showAddToCartNotice() {

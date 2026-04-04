@@ -1,0 +1,118 @@
+= コード定義書
+:project: 未来商店商材
+:author: Takumi Harada
+:revdate: 2026-04-05
+:doctype: article
+:toc:
+:toc-title: 目次
+:sectnums:
+
+== 概要
+
+本書はプロジェクト「{project}」に登場するコード値（識別子・種別値）を列挙したものです。
+ソースファイル `src/constants/code-definitions.js` から逆引きで抽出しています。
+
+---
+
+== 商品コード定義（CodeDefinitions.productsByPage）
+
+ファイル: `src/constants/code-definitions.js`
+
+[cols="2,2,2,1,1,2", options="header"]
+|===
+|ページキー（HTML ファイル名）
+|商品 ID
+|商品名
+|価格（円）
+|画像シンボル
+|用途
+
+|hokkori-mug.html
+|mag_01
+|ほっこり陶器マグ
+|1,800
+|☕
+|商品詳細ページ読み込み時にこのキーで定義を参照する
+
+|aroma-candle.html
+|candle_01
+|アロマキャンドル
+|2,400
+|🕯️
+|同上
+
+|organic-linen.html
+|linen_01
+|オーガニックリネン
+|1,200
+|🌿
+|同上
+
+|===
+
+=== 各フィールドの意味
+
+[cols="2,4", options="header"]
+|===
+|フィールド名
+|説明
+
+|id
+|localStorage のカートオブジェクトに保存する商品識別子
+
+|name
+|カート・購入画面で表示する商品名
+
+|price
+|1個あたりの税込み価格（円）
+
+|image
+|商品一覧・詳細ページで表示する絵文字シンボル
+
+|===
+
+---
+
+== 許可パス一覧（AppConstants.allowedPaths）
+
+ファイル: `src/constants/app-constants.js`
+
+[cols="2,4", options="header"]
+|===
+|パス
+|備考
+
+|index.html
+|トップページ（商品一覧）
+
+|cart.html
+|カートページ
+
+|hokkori-mug.html
+|ほっこり陶器マグ 商品詳細
+
+|aroma-candle.html
+|アロマキャンドル 商品詳細
+
+|organic-linen.html
+|オーガニックリネン 商品詳細
+
+|contact.html
+|問い合わせ入力フォーム
+
+|contact-confirm.html
+|問い合わせ確認画面
+
+|contact-complete.html
+|問い合わせ完了画面
+
+|checkout.html
+|購入情報入力
+
+|checkout-complete.html
+|購入完了画面
+
+|マイページ.html
+|マイページ（ログイン認証後に遷移）
+
+|===

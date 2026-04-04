@@ -1,7 +1,3 @@
-/**
- * @author Takumi Harada
- * @date 2026-03-31
- */
 import { AppConstants } from "../constants/app-constants.js";
 import { CodeDefinitions } from "../constants/code-definitions.js";
 import { CartService } from "./cart-service.js";
@@ -13,20 +9,8 @@ import { Validator } from "../utils/validator.js";
 import { XSSProtection } from "../utils/xss.js";
 
 /**
- * Main クラス
- * 目的: アプリ/ゲームの進行制御を担当する
- * 入力: 初期データ・現在状態・ユーザー操作
- * 処理: 初期化・分岐・状態更新を実行する
- * 出力: 進行更新された画面状態
- * 補足: 各下位クラスの責務を束ねる
+ * ページ別の初期化処理（商品詳細・問い合わせ・カート・購入）を分岐するエントリーポイントクラス。
  * @author Takumi Harada
- * @date 2026-04-01
- */
-/**
- * 処理概要:
- * - 初期化処理: 現在ページ判定、ヘッダー・フッター・演出管理クラスを準備する
- * - 進行処理: 商品ページ、問い合わせ、カート、購入画面ごとに必要な処理を分岐する
- * - 出力処理: localStorage と DOM を更新し、EC サイト各画面の表示を成立させる
  */
 class Main {
   /**
