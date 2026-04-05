@@ -20,6 +20,7 @@
 
 ^.^|{counter:変更履歴} |1.00 |Takumi Harada |2026/3/31 ^.^|- |新規作成
 ^.^|{counter:変更履歴} |1.01 |Takumi Harada |2026/4/4 <.^|全体 <.^|全体
+^.^|{counter:変更履歴} |1.02 |Takumi Harada |2026/4/5 <.^|全体 <.^|引数と戻り値を入力項目・出力項目の表に分割
 |===
 
 == 概要
@@ -46,15 +47,20 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 文字列内の HTML 特殊文字をエンティティに置換して返す。
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any
-|任意の値。`null` / `undefined` の場合は空文字を返す。
+<.^|`value` |string / any |任意の値。`null` / `undefined` の場合は空文字を返す。
+|===
 
-<.^|戻り値 |string
-|エスケープ済み文字列
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|string |エスケープ済み文字列
 |===
 
 *変換表:*
@@ -90,15 +96,20 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 全角英数字・記号を半角に変換し、不要なスペースを除去して返す。
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any
-|任意の文字列。falsy な場合は空文字を返す。
+<.^|`value` |string / any |任意の文字列。falsy な場合は空文字を返す。
+|===
 
-<.^|戻り値 |string
-|半角変換済み文字列
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|string |半角変換済み文字列
 |===
 
 *変換ルール:*
@@ -148,86 +159,140 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 ==== isRequired(value)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any |チェック対象の値
-<.^|戻り値 |boolean |`String(value).trim()` が空でなければ `true`
+<.^|`value` |string / any |チェック対象の値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`String(value).trim()` が空でなければ `true`
 |===
 
 ---
 
 ==== isSafeText(value)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any |チェック対象の値
-<.^|戻り値 |boolean
-|安全な文字列パターン（半角英字・スペース・ひらがな・カタカナ・漢字・和文記号）に一致すれば `true`
+<.^|`value` |string / any |チェック対象の値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |安全な文字列パターン（半角英字・スペース・ひらがな・カタカナ・漢字・和文記号）に一致すれば `true`
 |===
 
 ---
 
 ==== hasNumber(value)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any |チェック対象の値
-<.^|戻り値 |boolean |数字が 1 文字以上含まれれば `true`
+<.^|`value` |string / any |チェック対象の値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |数字が 1 文字以上含まれれば `true`
 |===
 
 ---
 
 ==== isKana(value)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any |チェック対象の値
-<.^|戻り値 |boolean |全角カタカナ（及びスペース・長音）のみで構成されれば `true`
+<.^|`value` |string / any |チェック対象の値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |全角カタカナ（及びスペース・長音）のみで構成されれば `true`
 |===
 
 ---
 
 ==== isTel(value)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any |チェック対象の値
-<.^|戻り値 |boolean
-|ハイフン除去後、10～11 桁の数字であれば `true`
+<.^|`value` |string / any |チェック対象の値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |ハイフン除去後、10～11 桁の数字であれば `true`
 |===
 
 ---
 
 ==== isEmail(value)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any |チェック対象の値
-<.^|戻り値 |boolean |RFC 準拠の正規表現に一致すれば `true`
+<.^|`value` |string / any |チェック対象の値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |RFC 準拠の正規表現に一致すれば `true`
 |===
 
 ---
 
 ==== isZip(value)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `value` |string / any |チェック対象の値
-<.^|戻り値 |boolean |`/^\d{3}-?\d{4}$/` に一致すれば `true`（ハイフン省略可）
+<.^|`value` |string / any |チェック対象の値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`/^\d{3}-?\d{4}$/` に一致すれば `true`（ハイフン省略可）
 |===
 
 ---
