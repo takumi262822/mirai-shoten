@@ -62,6 +62,7 @@ class Main {
     document.querySelectorAll(".js-nav").forEach((element) => {
       element.addEventListener("click", () => {
         const targetPath = element.getAttribute("data-href") || "";
+        // 指定パス以外への遷移は拒否（ホワイトリスト方式で開放リダイレクトを防ぐ）
         if (!AppConstants.allowedPaths.includes(targetPath)) {
           return;
         }
@@ -94,9 +95,9 @@ class Main {
   }
 
   initProductPage() {
-    const product = CodeDefinitions.productsByPage[this.currentPageName];
+    const product       = CodeDefinitions.productsByPage[this.currentPageName];
     const quantityInput = document.getElementById("quantity");
-    const addButton = document.querySelector(".btn-cart");
+    const addButton     = document.querySelector(".btn-cart");
 
     if (!product || !quantityInput || !addButton) {
       return;
@@ -104,10 +105,11 @@ class Main {
 
     addButton.addEventListener("click", () => {
       const quantity = CartService.normalizeQuantity(quantityInput.value);
-      const cart = JSON.parse(localStorage.getItem(AppConstants.storageKeys.cart) || "[]");
+      const cart     = JSON.parse(localStorage.getItem(AppConstants.storageKeys.cart) || "[]");
       const existingIndex = cart.findIndex((item) => item.id === product.id);
 
       if (existingIndex >= 0) {
+        // 同じ商品がすでにカートに入っている場合は新規追加でなく数量だけ加算する
         cart[existingIndex].quantity += quantity;
       } else {
         cart.push({ ...product, quantity });
