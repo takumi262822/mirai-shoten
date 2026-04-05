@@ -1,11 +1,26 @@
-= コード定義書
-:project: 未来商店商材
-:author: Takumi Harada
-:revdate: 2026-04-05
-:doctype: article
-:toc:
+= 【B】コード定義書_未来商店
+:lang: ja
+:doctype: book
+:toc: left
+:toclevels: 5
 :toc-title: 目次
 :sectnums:
+:sectnumlevels: 5
+:sectlinks:
+:imagesdir: ./images
+:icons: font
+:source-highlighter: coderay
+:example-caption: 例
+:table-caption: 表
+:figure-caption: 図
+
+[#変更履歴, title="変更履歴", cols="1,2,3,3,3,3", options="header", align="center"]
+|===
+^.^|No. ^.^|版数 ^.^|変更者 <.^|作成日/変更日 <.^|変更箇所 <.^|変更内容
+
+^.^|{counter:変更履歴} |1.00 |Takumi Harada |2026/3/31 ^.^|- |新規作成
+^.^|{counter:変更履歴} |1.01 |Takumi Harada |2026/4/4 <.^|全体 <.^|全体
+|===
 
 == 概要
 

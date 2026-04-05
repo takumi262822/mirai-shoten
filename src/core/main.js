@@ -1,3 +1,8 @@
+﻿/**
+ * Application entry point and initialization class
+ * @author Takumi Harada
+ * @date 2026/3/31
+ */
 import { AppConstants } from "../constants/app-constants.js";
 import { CodeDefinitions } from "../constants/code-definitions.js";
 import { CartService } from "./cart-service.js";

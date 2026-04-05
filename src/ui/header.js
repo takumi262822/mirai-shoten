@@ -1,6 +1,7 @@
-/**
+﻿/**
  * モバイルメニューの開閉とスクロール時のヘッダースタイル切替を担う UI クラス。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class Header {
   initMobileMenu(menuButtonId = "menu-btn", navId = "main-nav") {

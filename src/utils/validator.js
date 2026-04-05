@@ -1,6 +1,7 @@
-/**
+﻿/**
  * 氏名・フリガナ・電話番号・メールアドレスの形式チェックを担うバリデーションクラス。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class Validator {
   static safeNameRegex = /^[a-zA-Z\s\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf\u3000-\u303f]+$/;

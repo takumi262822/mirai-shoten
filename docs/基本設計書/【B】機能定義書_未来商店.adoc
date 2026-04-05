@@ -1,0 +1,200 @@
+= 【B】機能定義書_未来商店
+:lang: ja
+:doctype: book
+:toc: left
+:toclevels: 5
+:toc-title: 目次
+:sectnums:
+:sectnumlevels: 5
+:sectlinks:
+:imagesdir: ./images
+:icons: font
+:source-highlighter: coderay
+:example-caption: 例
+:table-caption: 表
+:figure-caption: 図
+
+[#変更履歴, title="変更履歴", cols="1,2,3,3,3,3", options="header", align="center"]
+|===
+^.^|No. ^.^|版数 ^.^|変更者 <.^|作成日/変更日 <.^|変更箇所 <.^|変更内容
+
+^.^|{counter:変更履歴} |1.00 |Takumi Harada |2026/3/31 ^.^|- |新規作成
+^.^|{counter:変更履歴} |1.01 |Takumi Harada |2026/4/4 <.^|全体 <.^|全体
+|===
+
+== 概要
+
+本書は MIRAI SHOTEN（未来商店商材）の主要機能の処理概要を記述した基本設計書です。
+
+---
+
+== モジュール構成
+
+[cols="2,4", options="header"]
+|===
+|ファイルパス
+|担当内容
+
+|src/core/main.js
+|ページ別初期化の分岐エントリーポイント
+
+|src/core/cart-service.js
+|数量正規化・カート合計金額の計算
+
+|src/constants/code-definitions.js
+|商品コードとページ名のマッピング
+
+|src/constants/app-constants.js
+|ストレージキー・許可パス・デフォルト文言の定数（→【定数】.CART_STORAGE_KEY 等）
+
+|src/ui/components.js
+|カート一覧・商品詳細・問い合わせエリア等の UI 描画
+
+|src/ui/header.js
+|モバイルメニュー開閉・スクロール時ヘッダースタイル切替
+
+|src/ui/footer.js
+|フッター著作権年表示
+
+|src/utils/validator.js
+|フォーム入力の検証
+
+|src/utils/xss.js
+|XSS 対策・エスケープ処理
+
+|src/styles/style-manager.js
+|アニメーション・カーソルグロー等の CSS クラス操作
+
+|===
+
+---
+
+== 処理概要
+
+=== 1. ページ初期化処理
+
+1-1. ページ名取得
+  a. `window.location.pathname` から末尾のファイル名を取得する
+  b. URL エンコードされている場合は `decodeURIComponent()` で復号する
+  c. 取得した名前を `currentPageName` として保持する
+
+1-2. 共通 UI 初期化
+  a. `Footer.setYear()` を呼び出し、【定数】.CART_STORAGE_KEY に関連するフッター年表示を更新する
+  b. `initNavigation()` を呼び出す（→1-3 参照）
+
+1-3. ナビゲーション初期化
+  a. `.js-nav` 要素全件にクリックイベントを設定する
+  b. クリック時、`data-href` を取得し `AppConstants.allowedPaths` に含まれるか検証する
+    i. 含まれない場合 → 処理を中断する
+    ii. マイページへの遷移の場合 → ログイン ID・パスワードの入力を検証する
+      - 未入力の場合 → `window.alert()` を表示して中断する
+    iii. 上記以外の場合 → `window.location.assign(targetPath)` で遷移する
+
+1-4. ページ別処理への分岐
+  a. `currentPageName === "index.html"` → 2. ホームページ処理 へ
+  b. `CodeDefinitions.productsByPage[currentPageName]` が存在 → 3. 商品詳細ページ処理 へ
+  c. `currentPageName === "contact.html"` → 4. 問い合わせページ処理 へ
+  d. `currentPageName === "contact-confirm.html"` → 5. 問い合わせ確認ページ処理 へ
+  e. `currentPageName === "cart.html"` → 6. カートページ処理 へ
+  f. `currentPageName === "checkout.html"` → 7. 購入ページ処理 へ
+
+---
+
+=== 2. ホームページ処理（index.html）
+
+2-1. ヘッダー・エフェクト初期化
+  a. `Header.initMobileMenu()` を呼び出しハンバーガーメニューを有効化する
+  b. `Header.initScrollClass("header", "scrolled", 50)` を呼び出しスクロール追従クラスを設定する
+  c. `StyleManager.initCursorGlow()` でカーソルグロー演出を有効化する
+  d. `StyleManager.initTilt()` / `initMagnet()` / `initReveal()` でインタラクション演出を設定する
+
+---
+
+=== 3. 商品詳細ページ処理
+
+3-1. 商品情報取得
+  a. `CodeDefinitions.productsByPage[currentPageName]` から商品定義オブジェクトを取得する
+  b. 商品定義・数量 input・カートボタンのいずれかが存在しない場合 → 処理を中断する
+
+3-2. カート追加処理
+  a. カートボタンのクリック時、以下を実行する
+    i. `CartService.normalizeQuantity(input.value)` で数量を正規化する
+    ii. `localStorage.getItem(`【定数】.CART_STORAGE_KEY`)` からカート配列を取得する
+    iii. 同一商品 ID が既にカートに存在する場合 → 数量を加算する
+    iv. 上記以外の場合 → 商品オブジェクトをカートに追加する
+    v. `localStorage.setItem` でカートを保存する
+    vi. `UIComponents.showAddToCartNotice()` で通知を表示する
+
+---
+
+=== 4. 問い合わせページ処理（contact.html）
+
+4-1. フォーム送信バリデーション
+  a. `submit` イベント時に以下フィールドを順次検証する
+    i. `name`: `Validator.isRequired()` + `Validator.isSafeText()` で検証する
+      - 数字を含む場合（`Validator.hasNumber()`）→ `nameNumberError` を表示する
+    ii. `kana`: `Validator.isKana()` で全角カタカナ検証する
+    iii. `tel`: `Validator.isTel()` で電話番号形式を検証する
+    iv. `email`: `Validator.isEmail()` で形式を検証する（blur 時に全角→半角変換も実行）
+    v. `pref`: `Validator.isRequired()` + `Validator.isSafeText()` で検証する
+    vi. `usage` ラジオ: 未選択の場合 → `usageError` を表示する
+    vii. `category` ラジオ: 未選択の場合 → `categoryError` を表示する
+  b. エラーが 1 件以上ある場合 → `event.preventDefault()` 後にページ先頭へスクロールする
+  c. 全件通過の場合 → フォームを送信する
+
+---
+
+=== 5. 問い合わせ確認ページ処理（contact-confirm.html）
+
+5-1. 入力値復元
+  a. `URLSearchParams` から入力値を取得する
+  b. 各フィールドの値を該当 DOM 要素の `textContent` に設定する
+
+---
+
+=== 6. カートページ処理（cart.html）
+
+6-1. カート読み込み・描画
+  a. `localStorage.getItem(`【定数】.CART_STORAGE_KEY`)` からカート配列を取得する
+  b. カートが空の場合 → `.empty-state` を表示して終了する
+  c. カートに商品がある場合 → `UIComponents` でカートリストを描画する
+
+6-2. 数量変更処理
+  a. `data-action="updateQty"` を持つ input の change イベントをコンテナで委譲する
+  b. `CartService.normalizeQuantity()` で数量を正規化して書き戻し、再描画する
+
+6-3. 削除処理
+  a. `data-action="deleteItem"` を持つボタンの click イベントをコンテナで委譲する
+  b. 対応インデックスの商品を `cart.splice(index, 1)` で削除し、再描画する
+
+---
+
+=== 7. 購入ページ処理（checkout.html）
+
+7-1. カートサマリー表示
+  a. `loadSummary()` でカートの商品名・数量・小計・合計を表示する
+
+7-2. 注文フォームバリデーション
+  a. 注文ボタンクリック時に以下フィールドを順次検証する
+    i. `name`: `Validator.isRequired()` + `Validator.isSafeText()`
+    ii. `email`: `Validator.isEmail()`
+    iii. `zip`: `Validator.isZip()`
+    iv. `address`: `Validator.isRequired()`
+    v. `payment` ラジオ: 未選択の場合 → `paymentError` を表示する
+  b. エラーがある場合 → 処理を中断する
+
+7-3. 注文確定処理
+  a. `localStorage.getItem(`【定数】.CART_STORAGE_KEY`)` からカートを取得する
+  b. `localStorage.getItem(`【定数】.ADMIN_ORDERS_KEY`)` から注文一覧を取得する
+  c. 新しい注文オブジェクトを生成し `allOrders.unshift()` で先頭に追加する
+  d. `localStorage.setItem(`【定数】.ADMIN_ORDERS_KEY`, ...)` で注文一覧を保存する
+  e. `localStorage.removeItem(`【定数】.CART_STORAGE_KEY`)` でカートを削除する
+  f. `checkout-complete.html` へ遷移する
+
+---
+
+== セキュリティ考慮事項
+
+. XSS: 全 DOM への動的テキスト出力は `XSSProtection.escape()` 経由の textContent を使用する
+. パス検証: ナビゲーション遷移先は `【定数】.allowedPaths` による許可リスト方式で制御する
+. 入力検証: 購入フォームは `Validator` で全フィールドを送信前に検証する

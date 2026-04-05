@@ -1,3 +1,8 @@
+﻿/**
+ * UI component rendering class
+ * @author Takumi Harada
+ * @date 2026/3/31
+ */
 import { XSSProtection } from "../utils/xss.js";
 
 /**

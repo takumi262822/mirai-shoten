@@ -1,3 +1,4 @@
+﻿<!-- * Shopping cart confirmation page * @author Takumi Harada * @date 2026/3/31 -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -84,6 +85,15 @@
 
         .empty-state { text-align: center; padding: 80px 0; opacity: 0.5; }
         footer { text-align: center; padding: 30px; color: rgba(255,255,255,0.3); font-size: 0.6em; letter-spacing: 4px; }
+
+        /* --- スマホ対応 (max-width: 600px) --- */
+        @media (max-width: 600px) {
+            header { padding: 12px 16px; }
+            .container { padding: 16px; }
+            .cart-item { flex-direction: column; gap: 8px; }
+            .item-qty input { width: 48px; }
+            .btn-checkout { width: 100%; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -97,7 +107,7 @@
 </div>
 
 <script type="module" src="./src/main.js"></script>
-    <footer>&copy; 2026 MIRAI SHOTEN. All Rights Reserved.</footer>
+    <footer>&copy; <span data-current-year>2026</span> MIRAI SHOTEN. All Rights Reserved.</footer>
 
 </body>
 </html>

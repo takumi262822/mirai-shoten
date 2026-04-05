@@ -1,0 +1,287 @@
+= 【B】共通処理定義書_未来商店
+:lang: ja
+:doctype: book
+:toc: left
+:toclevels: 5
+:toc-title: 目次
+:sectnums:
+:sectnumlevels: 5
+:sectlinks:
+:imagesdir: ./images
+:icons: font
+:source-highlighter: coderay
+:example-caption: 例
+:table-caption: 表
+:figure-caption: 図
+
+[#変更履歴, title="変更履歴", cols="1,2,3,3,3,3", options="header", align="center"]
+|===
+^.^|No. ^.^|版数 ^.^|変更者 <.^|作成日/変更日 <.^|変更箇所 <.^|変更内容
+
+^.^|{counter:変更履歴} |1.00 |Takumi Harada |2026/3/31 ^.^|- |新規作成
+^.^|{counter:変更履歴} |1.01 |Takumi Harada |2026/4/4 <.^|全体 <.^|全体
+|===
+
+== 概要
+
+本書は MIRAI SHOTEN（未来商店商材）全体で使用する共通ユーティリティの仕様を記載します。
+XSS 対策・入力バリデーション・UI コンポーネントを対象とします。
+
+---
+
+== 1. XSSProtection クラス
+
+=== 格納先
+
+`src/utils/xss.js`
+
+=== 説明
+
+DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻撃を防ぐ。
+全角英数字の半角正規化も担う。
+
+=== 静的メソッド
+
+==== escape(value)
+
+文字列内の HTML 特殊文字をエンティティに置換して返す。
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any
+|任意の値。`null` / `undefined` の場合は空文字を返す。
+
+<.^|戻り値 |string
+|エスケープ済み文字列
+|===
+
+*変換表:*
+
+[cols="1,1", options="header"]
+|===
+|入力文字
+|変換後エンティティ
+
+|`&`
+|`&amp;`
+
+|`<`
+|`&lt;`
+
+|`>`
+|`&gt;`
+
+|`"`
+|`&quot;`
+
+|`'`
+|`&#39;`
+|===
+
+*実装方針:*
+- 変換ルールはオブジェクトで管理し、`replace(/[&<>"']/g, ...)` で一括処理する
+- `null` / `undefined` は先に空文字変換して処理する
+
+---
+
+==== normalizeFullWidthAscii(value)
+
+全角英数字・記号を半角に変換し、不要なスペースを除去して返す。
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any
+|任意の文字列。falsy な場合は空文字を返す。
+
+<.^|戻り値 |string
+|半角変換済み文字列
+|===
+
+*変換ルール:*
+
+[cols="2,2", options="header"]
+|===
+|変換前
+|変換後
+
+|全角英大文字 `Ａ-Ｚ`
+|半角英大文字 `A-Z`
+
+|全角英小文字 `ａ-ｚ`
+|半角英小文字 `a-z`
+
+|全角数字 `０-９`
+|半角数字 `0-9`
+
+|全角 `＠`・`．`
+|半角 `@` ・ `.`
+
+|全角長音 `ー`
+|半角ハイフン `-`
+
+|半角スペース・全角スペース `\u3000`
+|（削除）
+|===
+
+*実装方針:*
+- 文字コード差分 `0xFEE0` を利用して全角→半角変換する
+- `ー`（U+30FC）のみ個別に `-` へ変換する
+- スペース・全角スペースを `replace` で空文字削除する
+
+---
+
+== 2. Validator クラス
+
+=== 格納先
+
+`src/utils/validator.js`
+
+=== 説明
+
+氏名・フリガナ・電話番号・メールアドレス・郵便番号の形式チェックを行う。
+
+=== 静的メソッド
+
+==== isRequired(value)
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any |チェック対象の値
+<.^|戻り値 |boolean |`String(value).trim()` が空でなければ `true`
+|===
+
+---
+
+==== isSafeText(value)
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any |チェック対象の値
+<.^|戻り値 |boolean
+|安全な文字列パターン（半角英字・スペース・ひらがな・カタカナ・漢字・和文記号）に一致すれば `true`
+|===
+
+---
+
+==== hasNumber(value)
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any |チェック対象の値
+<.^|戻り値 |boolean |数字が 1 文字以上含まれれば `true`
+|===
+
+---
+
+==== isKana(value)
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any |チェック対象の値
+<.^|戻り値 |boolean |全角カタカナ（及びスペース・長音）のみで構成されれば `true`
+|===
+
+---
+
+==== isTel(value)
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any |チェック対象の値
+<.^|戻り値 |boolean
+|ハイフン除去後、10～11 桁の数字であれば `true`
+|===
+
+---
+
+==== isEmail(value)
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any |チェック対象の値
+<.^|戻り値 |boolean |RFC 準拠の正規表現に一致すれば `true`
+|===
+
+---
+
+==== isZip(value)
+
+[cols="2,2,4", options="header"]
+|===
+^.^|項目 ^.^|型 <.^|内容
+
+<.^|引数 `value` |string / any |チェック対象の値
+<.^|戻り値 |boolean |`/^\d{3}-?\d{4}$/` に一致すれば `true`（ハイフン省略可）
+|===
+
+---
+
+== 3. Header クラス
+
+=== 格納先
+
+`src/ui/header.js`
+
+=== 説明
+
+モバイルメニューの開閉とスクロール時のヘッダースタイル切替を担う UI クラス。
+
+=== メソッド
+
+[cols="2,4", options="header"]
+|===
+^.^|メソッド <.^|説明
+
+<.^|`initMobileMenu(menuButtonId, navId)`
+|ハンバーガーボタンのクリックで `nav.classList.toggle("open")` を切り替える。ナビ内のリンク押下時は自動でメニューを閉じる。
+
+<.^|`initScrollClass(selector, className, threshold)`
+|`window.scrollY > threshold` のとき `header.classList.add(className)` する。スクロールが戻れば削除する。
+|===
+
+---
+
+== 4. Footer クラス
+
+=== 格納先
+
+`src/ui/footer.js`
+
+=== 説明
+
+フッターの著作権年表示を現在年に更新する UI クラス。
+
+=== メソッド
+
+[cols="2,4", options="header"]
+|===
+^.^|メソッド <.^|説明
+
+<.^|`setYear(selector)`
+|`[data-current-year]` 属性を持つ要素に `new Date().getFullYear()` の年を設定する。要素が存在しない場合は何もしない。
+|===
+
+---
+
+== 5. 使用上の共通ルール
+
+. ユーザー入力値は必ず `XSSProtection.escape()` を通してから DOM に反映する
+. フォーム送信前に `Validator` クラスを経由してバリデーションを行う
+. 全角入力フォームは `normalizeFullWidthAscii()` で正規化してから保存・検証する
+. localStorage への直接読み書きは `src/core/cart-service.js` 経由で行い、他所で直接操作しない

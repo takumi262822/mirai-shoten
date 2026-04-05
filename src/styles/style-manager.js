@@ -1,6 +1,7 @@
-/**
+﻿/**
  * カーソル発光・3Dティルト・マグネット・リビールなどトップページの視覚演出を初期化・制御するクラス。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class StyleManager {
   initCursorGlow(selector = "#cursor-glow") {

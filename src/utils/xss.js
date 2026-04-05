@@ -1,6 +1,7 @@
-/**
+﻿/**
  * HTML 特殊文字をエンティティに変換し XSS を防ぐサニタイズクラス。全角英数字の正規化も担う。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class XSSProtection {
   static escape(value) {

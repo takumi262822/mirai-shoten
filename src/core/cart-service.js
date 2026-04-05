@@ -1,6 +1,7 @@
-/**
+﻿/**
  * 数量値の正規化とカート合計金額の計算を担うサービスクラス。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class CartService {
   static normalizeQuantity(value) {
