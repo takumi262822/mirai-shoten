@@ -217,6 +217,49 @@ class Main {
         window.history.back();
       });
     });
+
+    // 「送信する」ボタン: API呼び出し → 完了ページへ遷移
+    const submitBtn = document.querySelector('[data-href="contact-complete.html"]');
+    if (submitBtn) {
+      // js-nav による直接遷移を無効化し、API経由の送信に切り替える
+      submitBtn.classList.remove("js-nav");
+      submitBtn.addEventListener("click", async () => {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "送信中…";
+
+        const body = {
+          name:     params.get("name")     || "",
+          kana:     params.get("kana")     || "",
+          tel:      params.get("tel")      || "",
+          email:    params.get("email")    || "",
+          pref:     params.get("pref")     || "",
+          usage:    params.get("usage")    || "",
+          category: params.get("category") || "",
+          message:  params.get("message")  || "",
+        };
+
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+
+          if (data.ok) {
+            window.location.assign("contact-complete.html");
+          } else {
+            window.alert(`送信に失敗しました。\n${data.error || "しばらくしてから再度お試しください。"}`);
+            submitBtn.disabled = false;
+            submitBtn.textContent = "送信する";
+          }
+        } catch {
+          window.alert("通信エラーが発生しました。ネットワークを確認してください。");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "送信する";
+        }
+      });
+    }
   }
 
   initCartPage() {

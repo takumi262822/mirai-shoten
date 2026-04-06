@@ -4,10 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "node server.js",
     "lint": "eslint src/**/*.js tests/**/*.js",
     "test": "node --test"
   },
   "devDependencies": {
     "eslint": "^8.57.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "nodemailer": "^8.0.4"
   }
 }
