@@ -241,10 +241,10 @@ class Main {
 
       const total = CartService.calculateTotal(cart);
       container.innerHTML = `
-        <h2>Your Basket</h2>
+        <h2>おもり気のリスト</h2>
         ${UIComponents.renderCartRows(cart)}
         <div class="summary-box">
-          <div class="total-label">Estimated Total</div>
+          <div class="total-label">お支払い合計</div>
           <div class="total-price">\u00a5${total.toLocaleString()}</div>
           <a href="checkout.html" class="btn-checkout">ご購入手続きへ</a>
           <br>

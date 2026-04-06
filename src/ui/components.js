@@ -13,7 +13,7 @@ export class UIComponents {
   static showAddToCartNotice() {
     const box = document.createElement("div");
     const subTitle = document.createElement("span");
-    subTitle.textContent = "THANK YOU";
+    subTitle.textContent = "ありがとうございます";
     Object.assign(subTitle.style, {
       fontSize: "0.6em",
       letterSpacing: "5px",
@@ -22,7 +22,7 @@ export class UIComponents {
     });
 
     box.appendChild(subTitle);
-    box.appendChild(document.createTextNode("Added to Collection"));
+    box.appendChild(document.createTextNode("カートに追加しました"));
 
     Object.assign(box.style, {
       position: "fixed",
